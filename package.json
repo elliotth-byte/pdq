@@ -1,0 +1,12 @@
+{
+  "name": "deal-canvas-bot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Attaches the PDQ canvas template to every new #deal- channel in the Eleos Slack workspace.",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@slack/web-api": "^7.3.0"
+  }
+}
