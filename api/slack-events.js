@@ -40,6 +40,7 @@ async function attachDealCanvas(channel) {
   try {
     const result = await slack.conversations.canvases.create({
       channel_id: channel.id,
+      title: 'PDQ',
       document_content: {
         type: 'markdown',
         markdown,
