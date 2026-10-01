@@ -3,12 +3,6 @@ const { verifySlackSignature, getRawBody } = require('../lib/verifySlack');
 const { DEAL_CHANNEL_TEMPLATE } = require('../lib/dealTemplate');
 const { CAH_DEAL_CHANNEL_TEMPLATE } = require('../lib/cahDealTemplate');
 
-// Vercel's default body parser would consume the stream before we can
-// verify the raw bytes against Slack's signature, so we read it ourselves.
-module.exports.config = {
-  api: { bodyParser: false },
-};
-
 const slack = new WebClient(process.env.SLACK_BOT_TOKEN);
 
 // Channels are matched by name prefix, e.g. "#deal-acme-corp" -> "deal-acme-corp".
@@ -76,6 +70,13 @@ module.exports = async (req, res) => {
     res.status(200).json({ challenge: payload.challenge });
     return;
   }
+
+  console.log(
+    'Received payload.type=%s event.type=%s channel=%o',
+    payload.type,
+    payload.event?.type,
+    payload.event?.channel
+  );
 
   if (payload.type === 'event_callback' && payload.event?.type === 'channel_created') {
     try {
