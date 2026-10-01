@@ -27,6 +27,17 @@ async function attachDealCanvas(channel) {
   if (!markdown) return;
 
   try {
+    await slack.conversations.join({ channel: channel.id });
+  } catch (err) {
+    // already_in_channel is fine; anything else means we likely can't
+    // proceed (e.g. a private channel we weren't invited to).
+    if (err?.data?.error !== 'already_in_channel') {
+      console.error(`Failed to join #${name} (${channel.id}):`, err?.data?.error || err);
+      throw err;
+    }
+  }
+
+  try {
     const result = await slack.conversations.canvases.create({
       channel_id: channel.id,
       document_content: {
